@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <div id="maincontainer"></div>
+    <script>
+        var main = document.getElementById("maincontainer");
+
+        var title = document.createElement("h2");
+        title.innerHTML = "Exercise 04: JavaScript & DOM";
+        main.appendChild(title);
+        
+        var button = document.createElement("button");
+        button.innerHTML = "Click me to display Date and Time";
+        button.onclick = worker;
+        button.setAttribute("id", "butt");
+        main.appendChild(button);
+
+        main.appendChild(document.createElement("br"));
+        main.appendChild(document.createElement("br"));
+        
+        var info = document.createElement("a");
+        info.innerHTML = "Personal Info";
+        info.setAttribute("id", "info");
+        info.setAttribute("href",'#');
+        info.style.margin = "0";
+        info.style.padding = "0";
+        info.style.width = "fit-content";
+        info.onmouseover = cover;
+        info.onmouseout = notcover;
+        createList();
+        info.onclick = function() {
+            toggleList();
+        };
+        main.appendChild(info);
+        var list = createList();
+
+        function toggleList() {
+            if (list) {
+                list.style.display = list.style.display === "none" ? "block" : "none";
+            } else {
+                list = createList();
+            }
+        }
+        
+        function createList() {
+            var newList = document.createElement("ul");
+            
+            var name = document.createElement("li");
+            name.innerHTML = "Pithakpong Sawongnam student ID: 65010745";
+            newList.appendChild(name);
+            
+            var subject = document.createElement("li");
+            subject.innerHTML = "Subject: Web Application Development";
+            newList.appendChild(subject);
+
+            var semester = document.createElement("li");
+            semester.innerHTML = "Semester: 2";
+            newList.appendChild(semester);
+
+            main.appendChild(newList);
+            newList.style.display = "none";
+
+            return newList;
+        }
+
+        function cover() {
+            info.style.backgroundColor = "yellow";
+            info.style.color = "blue";
+        }
+        function notcover() {
+            info.style.backgroundColor = "";
+            info.style.color = "";
+        }
+
+        var w;
+        var click_number = 0;
+
+        function worker() {
+            if (typeof(Worker) !== "undefined") {
+                if (typeof(w) === "undefined") {
+                    w = new Worker("worker.js");
+                }
+
+                //align time
+                w.postMessage(click_number);
+                if (click_number % 2 == 0){
+                    button.style.position = "absolute";
+                    button.style.top = "0";
+                    button.style.right = "0";
+                    button.style.margin = "10px";
+                }
+                else{
+                    button.style.position = "";
+                    button.style.top = "";
+                    button.style.right = "";
+                    button.style.margin = "";
+                }
+                click_number++;
+                w.onmessage = function(event) {
+
+                    //time algorithm
+                    var hours = event.data/3600 >= 10 ? String(Math.floor(event.data/3600)) : '0'+ String(Math.floor(event.data/3600));
+                    var minutes = (event.data%3600)/60 >= 10 ? String(Math.floor((event.data%3600)/60)) : '0'+ String(Math.floor((event.data%3600)/60));
+                    var seconds = (event.data%3600)%60 >= 10 ? String(Math.floor((event.data%3600)%60)) : '0'+ String(Math.floor((event.data%3600)%60));
+                    document.getElementById("butt").innerHTML = "Sun Feb 12 2023 "+ hours+":"+minutes+":"+seconds+" GMT+0700 (Indochina Time)";
+                    
+                    // color pattern
+                    var sec_integer = Number(seconds);
+                    if (sec_integer % 6 == 0){
+                        button.style.color = "green";
+                        button.style.backgroundColor = "yellow";
+                    }else if (sec_integer % 6 == 1){
+                        button.style.color = "blue";
+                        button.style.backgroundColor = "red";
+                    }else if (sec_integer % 6 == 2){
+                        button.style.color = "green";
+                        button.style.backgroundColor = "yellow";
+                    }else if(sec_integer % 6 == 3){
+                        button.style.color = "white";
+                        button.style.backgroundColor = "red";
+                    }else if(sec_integer % 6 == 4){
+                        button.style.color = "blue";
+                        button.style.backgroundColor = "pink";
+                    }else if(sec_integer % 6 == 5){
+                        button.style.color = "blue";
+                        button.style.backgroundColor = "green";
+                    }
+                };
+            }
+        }
+
+        // snapshot
+        var snapshot = document.createElement("h1");
+        snapshot.innerHTML = "Snapshots";
+        main.appendChild(snapshot);
+        var list2 = document.createElement("ul");
+        main.appendChild(list2);
+
+        // fireworks
+        var e1 = document.createElement("li");
+        list2.appendChild(e1);
+        var link1 = document.createElement("a");
+        link1.innerHTML = "fireworks";
+        link1.setAttribute("href","#");
+        link1.onclick = function() {
+            changeImage("https://img2.pic.in.th/pic/fireworks.png");
+        };
+        e1.appendChild(link1);
+
+        // Crest
+        var e2 = document.createElement("li");
+        list2.appendChild(e2);
+        var link2 = document.createElement("a");
+        link2.innerHTML = "Crest";
+        link2.setAttribute("href","#");
+        link2.onclick = function() {
+            changeImage("https://img5.pic.in.th/file/secure-sv1/crest.png");
+        };
+        e2.appendChild(link2);
+
+        // Action 
+        var e3 = document.createElement("li");
+        list2.appendChild(e3);
+        var link3 = document.createElement("a");
+        link3.innerHTML = "Action";
+        link3.setAttribute("href","#");
+        link3.onclick = function() {
+            changeImage("https://img5.pic.in.th/file/secure-sv1/actionef382105ac1821f5.png");
+        };
+        e3.appendChild(link3);
+
+        // Buffalo
+        var e4 = document.createElement("li");
+        list2.appendChild(e4);
+        var link4 = document.createElement("a");
+        link4.innerHTML = "Buffalo";
+        link4.setAttribute("href","#");
+        link4.onclick = function() {
+            changeImage("https://img2.pic.in.th/pic/buffalo.png");
+        };
+        e4.appendChild(link4);
+
+        // kmitl logo
+        var image = document.createElement("IMG");
+        image.setAttribute("src","https://img2.pic.in.th/pic/kmitl.png");   
+        image.setAttribute("alt", "kmitl logo");
+        main.appendChild(image);     
+        function changeImage(link){
+            image.setAttribute("src",link);
+        }
+        // link kmitl = https://img2.pic.in.th/pic/kmitl.png
+        // link action = https://img5.pic.in.th/file/secure-sv1/actionef382105ac1821f5.png
+        // link firework = https://img2.pic.in.th/pic/fireworks.png
+        // link buffalo = https://img2.pic.in.th/pic/buffalo.png
+        // link crest = https://img5.pic.in.th/file/secure-sv1/crest.png
+
+    </script>
+</body>
+</html>
